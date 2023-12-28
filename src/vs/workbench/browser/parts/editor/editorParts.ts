@@ -312,6 +312,30 @@ export class EditorParts extends MultiWindowParts<EditorPart> implements IEditor
 		}
 	}
 
+	private async applyState(state: IEditorPartsUIState): Promise<boolean> {
+
+		// Close all editors and auxiliary parts first
+		for (const part of this.parts) {
+			if (part === this.mainPart) {
+				continue; // main part takes care on its own
+			}
+
+			for (const group of part.getGroups(GroupsOrder.MOST_RECENTLY_ACTIVE)) {
+				const closed = await group.closeAllEditors();
+				if (!closed) {
+					return false;
+				}
+			}
+
+			(part as unknown as IAuxiliaryEditorPart).close();
+		}
+
+		// Restore auxiliary state
+		await this.restoreState(state);
+
+		return true;
+	}
+
 	//#endregion
 
 	//#region Events

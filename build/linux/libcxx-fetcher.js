@@ -6,15 +6,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.downloadLibcxxObjects = exports.downloadLibcxxHeaders = void 0;
 // Can be removed once https://github.com/electron/electron-rebuild/pull/703 is available.
-const fs = require("fs");
-const path = require("path");
-const debug = require("debug");
-const extract = require("extract-zip");
-const get_1 = require("@electron/get");
-const root = path.dirname(path.dirname(__dirname));
-const d = debug('libcxx-fetcher');
-async function downloadLibcxxHeaders(outDir, electronVersion, lib_name) {
-    if (await fs.existsSync(path.resolve(outDir, 'include'))) {
+
         return;
     }
     if (!await fs.existsSync(outDir)) {
